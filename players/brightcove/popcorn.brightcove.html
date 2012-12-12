@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Popcorn Brightcove Player Example</title>
+      <script src="../../popcorn.js"></script>
+      <script src="../../modules/player/popcorn.player.js"></script>
+      <script type="text/javascript" src="popcorn.brightcove.js"></script>
+      <script src="../../plugins/footnote/popcorn.footnote.js"></script>
+      <script src="../../plugins/flickr/popcorn.flickr.js"></script>
+      <script src="../../plugins/webpage/popcorn.webpage.js"></script>
+      <script src="../../plugins/googlefeed/popcorn.googlefeed.js"></script>
+      <script src="../../plugins/image/popcorn.image.js"></script>
+      <script src="../../plugins/subtitle/popcorn.subtitle.js"></script>
+      <script src="../../plugins/twitter/popcorn.twitter.js"></script>
+      <script>
+        // Helper function to get elements
+        function element(id) {
+
+          return document.getElementById(id);
+        }
+        
+        document.addEventListener( 'DOMContentLoaded', function() {
+          var paused = true,
+              popcorn;
+
+          popcorn = Popcorn.brightcove( '#video', 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001' );
+          
+          popcorn = popcorn
+            .footnote({
+              start: 5, // seconds
+              end: 40, // seconds
+              text: 'The video is "Martial Dance", by NYPL',
+              target: 'footnotediv'
+            })
+            .flickr({
+              start: 20, // seconds
+              end: 40, // seconds
+              tags: 'bhutan',
+              numberofimages: '8',
+              target: 'flickrdiv'
+            })
+            .twitter({
+              start: 20, // seconds
+              end: 45, // seconds
+              title: 'NYPL',
+              src: '#nypl',
+              target: 'twitterdiv'
+            })
+            .subtitle({
+              start: 5, // seconds
+              end: 15, // seconds
+              text: 'This is overlaid on top of the video. You can hightlight it!',
+              display: 'inline',
+              language: "en"
+            })
+            .webpage({
+              id: "webpages-a", 
+              start: 0, // seconds
+              end: 15, // seconds
+              src: 'http://www.nypl.org/',
+              target: 'webpagediv'
+            })
+            .googlefeed({
+                start: 0, // seconds
+                end: 15, // seconds
+                target: "feeddiv",
+                url: "http://www.nypl.org/news/feed",
+                title: "NYPL Feed",
+                orientation: "Vertical"
+            })
+            .image({
+              start: 5, // seconds
+              end: 15, // seconds
+              href: 'http://www.drumbeat.org/',
+              src: 'https://www.drumbeat.org/media//images/drumbeat-logo-splash.png',
+              target: 'imagediv'
+            })
+          .on( 'durationchange', function() {
+            element( 'player-duration' ).innerHTML = popcorn.duration();
+          })
+          .on( 'volumechange', function() {
+            element( 'player_vol' ).innerHTML = popcorn.volume();
+          })
+          .on( 'timeupdate', function() {
+            element( 'player-time' ).innerHTML = popcorn.currentTime();
+          })
+          // Update button labels
+          .on( 'play' , function() {
+            paused = false;
+            element( 'btn-play-pause' ).innerHTML = 'Pause';
+          })
+          .on('pause', function() {
+            paused = true;
+            element( 'btn-play-pause' ).innerHTML = 'Play';
+          });
+
+          element( 'player-status' ).innerHTML = 'Ready';
+          element( 'player_vol' ).innerHTML = popcorn.volume();
+          
+          // Single play/pause button
+          element( 'btn-play-pause' ).addEventListener( 'click', function() {
+            if ( paused ) {
+              popcorn.play();
+            } else {
+              popcorn.pause();
+            }
+          }, false);
+
+          // Seek
+          element('btn-seek').addEventListener('click', function() {
+
+            popcorn.currentTime( 30 );
+          }, false);
+
+          // Volume
+          element('btn-volume').addEventListener('click', function() {
+            var volume = (popcorn.volume() === 1) ? 0.5 : 1;
+            popcorn.volume(volume);
+          }, false);
+          
+          element('btn-mute').addEventListener('click', function() {
+            popcorn.mute( !popcorn.media.muted );
+          }, false);
+        }, false );
+    </script>
+  </head>
+  <body>
+    <div>
+      <div>
+        <div id="video" style="width: 640px; height: 390px;" ></div><br />
+        <button class="simple" id="btn-play-pause">Play</button>
+        <button class="seek" id="btn-seek">Seek to 30</button>
+        <button class="volume" id="btn-volume">Toggle Volume</button>
+        <button class="mute" id="btn-mute">Toggle Mute</button>
+        <div>
+          <ul>
+            <li>Status: <span id="player-status">Not Ready</span></li>
+            <li>Current Time (s): <span id="player-time"></span></li>
+            <li>Volume (0-1): <span id="player_vol"></span></li>
+            <li>Video Duration (s): <span id="player-duration"></span></li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3>Description</h3>
+        <p>
+          This demo will showcase how a Brightcove flash video can be integrated into Popcorn. This  is done by making the flash video masquerade as HTML 5 video.<br />
+          Due to the Flash security model, this demo must be  run from a web server<br />
+          From 5 to 40 seconds, the footnote 'The video is "Martial Dance", by NYPL' will appear below 'Footnote Area'.
+        <hr >
+          Brightcove does support their player to be chromeless (hidden controls), but their controls are left in to provide richer interaction.<br />
+          Custom controls have been developed and tied into their player for this demo.<br />
+          Clicking play/pause or seeking in either the video or via custom controls will cause the other to update.<br />
+          The video can be specified in the HTML source by giving the full brightcove link url 
+          (http://link.brightcove.com/services/player/bcpid{PLAYER_ID}?bckey={PLAYER_KEY}&bctid={VIDEO_ID}) to either Popcorn.brightcove or as the div src attribute.<br/>
+        </p>
+        <h4>Expected Events</h4>
+        <ul>
+          <li>From 5 to 40 seconds, the footnote 'The video is "Martial Dance", by NYPL' will appear below 'Footnote Area'.</li>
+          <li>From 20 to 40 seconds, the a flickr stream of 8 images tagged 'bhutan' will appear below 'Flickr Area'.</li>
+          <li>From 20 to 45 seconds, tweets tagged #nypl will appear below 'Twitter Area'.</li>
+          <li>From 5 to 15 seconds, the Mozilla Drumbeat logo will appear below 'Image Area'.</li>
+          <li>From 5 to 15 seconds, the subtitle 'This is overlaid on top of the video. You can hightlight it!' will appear in front of the video.</li>
+          <li>From 0 to 20 seconds, blogs from 'http://www.nypl.org/news/feed' will appear below 'Google Feed Area'.</li>
+          <li>From 0 to 15 seconds, the site 'http://www.nypl.org/' will appear below 'Web Page Area'.</li>
+        </ul>
+      </div>
+      <div id="footnotediv" width="50%" height="50%">
+        <strong>Footnote Area</strong><br />
+      </div>
+      <div id="flickrdiv" width="50%" height="50%">
+        <strong>Flickr Area</strong><br />
+      </div>
+      <div id="twitterdiv" width="50%" height="50%">
+        <strong>Twitter Area</strong><br />
+      </div>
+      <div id="imagediv" width="50%" height="50%">
+        <strong>Image Area</strong><br />
+      </div>
+      <div id="feeddiv" width="50%" height="50%">
+        <strong>Google Feed Area</strong><br />
+      </div>
+      <div id="webpagediv" width="100px" height="50px">
+        <strong>Web Page Area</strong><br />
+      </div>
+    </div>
+  </body>
+</html>
