@@ -1,5 +1,5 @@
 test( "BC Script not loaded", 1, function() {
-  ok( !window.BC, "Player doesn't load brightcove before first setup call" );
+  ok( !window.brightcove, "Player doesn't load brightcove before first setup call" );
 });
 
 asyncTest( "autoplay on", 1, function() {

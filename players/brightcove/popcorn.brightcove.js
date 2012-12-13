@@ -5,15 +5,21 @@
       onBrightcovePlayerAPIReady.waiting[playerid]();
     }
   };
+  window.onBrightcovePlayerAPIError = function(evt) {
+    for ( var i = 0; i < onBrightcovePlayerAPIError.waiting.length; i++ ) {
+      onBrightcovePlayerAPIError.waiting[ i ](evt);
+    }
+  };
 
   // existing brightcove references can break us.
-  // remove it and use the one we can trust.
-  if ( window.BC ) {
-    window.quarantineBC = window.BC;
-    window.BC = null;
+  // remove it and use the one we can trust.)
+  if ( window.brightcove ) {
+    window.quarantineBC = window.brightcove;
+    window.brightcove = null;
   }
 
   onBrightcovePlayerAPIReady.waiting = {};
+  onBrightcovePlayerAPIError.waiting = [];
 
   var scriptLoaded = false,
       loading = false;
@@ -55,8 +61,7 @@
               return;
             }
             
-            currentTime = val;
-            
+            currentTime = val;            
             seeking = true;
             media.dispatchEvent( "seeking" );  
             
@@ -193,6 +198,7 @@
         container.id = media.id + Popcorn.guid();
         container['data-object'] = 'object'+container.id;
         onBrightcovePlayerAPIReady.waiting[ container['data-object'] ] = brightcoveInit;
+        onBrightcovePlayerAPIError.waiting.push( brightcoveError );
         
         // Retrieve player parameters from src
         bcpid = /^.*(?:\/|bcpid)(.{13})/.exec( media.src )[ 1 ];
@@ -236,6 +242,7 @@
           dynamicStreaming: "true",
           '@videoPlayer': bctid,
           templateLoadHandler: "onBrightcovePlayerAPIReady",
+          templateErrorHandler: "onBrightcovePlayerAPIError",
           autoStart: options.autoplay ? "true" : "false"
         };
         for(var p in params)
@@ -269,13 +276,22 @@
           flashVersion, expressInstallSwfurl, flashvars, playerVars, atts );
         
       };
+      
+      var brightcoveError = function(error){
+        media.error = {
+          customCode: error.code || 100  // 100 = invalid url
+        };
+        media.dispatchEvent( "error" );
+      };
 
       var brightcoveInit = function() {
 
         var firstPlay = true, seekEps = 0.1,
             experience = brightcove.getExperience(container['data-object']),
-            brightcoveExp = experience.getModule(APIModules.EXPERIENCE);
-            
+            brightcoveExp;
+              
+        if ( !experience ) return;        
+        options.brightcoveExp = experience.getModule(APIModules.EXPERIENCE);
         options.brightcoveObject = experience.getModule(APIModules.VIDEO_PLAYER);
         
         var timeUpdate = function() {
@@ -357,20 +373,12 @@
           }
         };
         
-        var onError = function(evt) {
-          media.error = {
-            customCode: evt.code
-          };
-          media.dispatchEvent( "error" );
-        };
-        
         var onTemplateReady = function(evt){
           
           // retrieve duration
           media.duration = options.brightcoveObject.getVideoDuration();       
           media.dispatchEvent( "durationchange" );
           media.dispatchEvent( "loadedmetadata" );
-          media.dispatchEvent( "loadeddata" );
           media.readyState = 4;
           
           // pulling initial volume states form baseplayer
@@ -384,8 +392,9 @@
   
           media.currentTime = fragmentStart;
   
-          media.dispatchEvent( "loadstart" );          
-          
+          media.dispatchEvent( "loadstart" );
+          media.dispatchEvent( "loadeddata" );
+            
         };
         
         /* add event listeners */
@@ -394,15 +403,15 @@
         options.brightcoveObject.addEventListener(BCMediaEvent.STOP, onMediaStop);
         options.brightcoveObject.addEventListener(BCMediaEvent.COMPLETE, onMediaComplete);
         options.brightcoveObject.addEventListener(BCMediaEvent.VOLUME_CHANGE, onVolumeChange);
-        options.brightcoveObject.addEventListener(BCMediaEvent.ERROR, onError);
+        options.brightcoveObject.addEventListener(BCMediaEvent.ERROR, brightcoveError);
         
-        brightcoveExp.addEventListener(BCExperienceEvent.TEMPLATE_READY, onTemplateReady);
+        options.brightcoveExp.addEventListener(BCExperienceEvent.TEMPLATE_READY, onTemplateReady);
 
       };
       
       // load the Brightcove API script if it doesn't exist
       function loadScript() {
-        if ( !window.BC && !loading ) {
+        if ( !window.brightcove && !loading ) {
           loading = true;
           Popcorn.getScript( "http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js", function(){
             Popcorn.getScript( "http://admin.brightcove.com/js/BrightcoveExperiences.js", function(){
@@ -436,13 +445,22 @@
 
       options.destroyed = true;
 
-      var brightcoveObject = options.brightcoveObject;
+      var brightcoveObject = options.brightcoveObject,
+          brightcoveExp = options.brightcoveExp;
+
       if( brightcoveObject ){
         brightcoveObject.stop();
+      }
+      if ( brightcoveExp ) {
+        brightcoveExp.unload();
       }
       
       if ( document.getElementById( options._container.id ) )
         this.removeChild( document.getElementById( options._container.id ) );
+
+      if ( document.getElementById( 'object'+options._container.id ) )
+        this.removeChild( document.getElementById( 'object'+options._container.id ) );
+
     }
   });
 }( window, Popcorn ));
