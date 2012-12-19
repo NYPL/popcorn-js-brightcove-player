@@ -40,6 +40,7 @@
           firstGo = true,
           seeking = false,
           fragmentStart = 0,
+          canPlay = false,
 
           // state code for volume changed polling
           lastMuted = false,
@@ -65,7 +66,7 @@
             seeking = true;
             media.dispatchEvent( "seeking" );  
             
-            options.brightcoveObject.seek( val );                    
+            options.brightcoveObject.seek( val );           
             
           },
           get: function() {
@@ -143,6 +144,26 @@
             return options.brightcoveObject.getVolume();
           }
         });
+        
+        Popcorn.player.defineProperty( media, "buffered", {
+          get: function() {
+            return {
+              length: 1,
+              start: function(index){
+                var position = options.brightcoveObject.getVideoPosition(),
+                    buffer = options.brightcoveObject.getBackBufferLength(),
+                    start = Math.floor( position - buffer );
+                return start < 0 ? 0 : start;
+              },
+              end: function(index){
+                var position = options.brightcoveObject.getVideoPosition(),
+                    buffer = options.brightcoveObject.getBufferLength(),
+                    end = Math.floor( position + buffer );
+                return isNaN( end ) ? 0 : end;
+              }
+            };
+          }
+        });
 
         media.play = function() {
 
@@ -186,6 +207,8 @@
             
           });
         };
+        
+        
       };
       
       var scriptReady = function(){
@@ -231,20 +254,21 @@
         
         // Build url for brightcove player
         params = {
-          height: "100%",
-          width: "100%",
+          height: options.height || "100%",
+          width: options.width || "100%",
           flashID: container['data-object'],
           bgcolor: options.bgcolor || "#ffffff",
           playerID: bcpid,
           playerKey: bckey,
           isVid: "true",
           isUI: "true",
-          dynamicStreaming: "true",
+          dynamicStreaming: options.dynamicStreaming || "true",
           '@videoPlayer': bctid,
           templateLoadHandler: "onBrightcovePlayerAPIReady",
           templateErrorHandler: "onBrightcovePlayerAPIError",
           autoStart: options.autoplay ? "true" : "false"
         };
+
         for(var p in params)
            query.push(encodeURIComponent(p) + "=" + encodeURIComponent(params[p]));
         query = query.join("&");
@@ -294,14 +318,42 @@
         options.brightcoveExp = experience.getModule(APIModules.EXPERIENCE);
         options.brightcoveObject = experience.getModule(APIModules.VIDEO_PLAYER);
         
+        // custom bitrate
+        if ( options.bitRateRange && options.bitRateRange.length==2 ) {
+          options.brightcoveObject.setBitRateRange( options.bitRateRange[0], options.bitRateRange[1] );
+        }
+        
+        // custom buffer capacity
+        if ( options.bufferCapacity && options.bufferCapacity > 0 ) {
+          options.brightcoveObject.setBackBufferCapacity(options.bufferCapacity);
+          options.brightcoveObject.setBufferCapacity(options.bufferCapacity);
+        }
+        
+        // custom buffer time
+        if ( options.bufferTime && options.bufferTime > 0 ) {
+          options.brightcoveObject.enableInitialBandwidthDetection(false);
+          options.brightcoveObject.setDefaultBufferTime(options.bufferTime);
+        }
+        
         var timeUpdate = function() {
 
           if ( options.destroyed ) {
             return;
           }
+          
+          // check buffers for canplay events
+          if ( !canPlay ) {
+            var bufferCapacity = options.brightcoveObject.getBufferCapacity(),
+                bufferLength = options.brightcoveObject.getBufferLength();
+            // we could play through if buffer length is half of capacity
+            if ( bufferLength >= bufferCapacity/2 ) {
+              media.dispatchEvent( "canplay" );
+              media.dispatchEvent( "canplaythrough" );
+              canPlay = true;
+            }
+          }
 
           var bcTime = options.brightcoveObject.getVideoPosition();
-
           if ( !seeking ) {
             currentTime = bcTime;
           } else if ( currentTime >= bcTime - seekEps && currentTime <= bcTime + seekEps ) {
@@ -312,7 +364,7 @@
             // seek didn't work very well, try again with higher tolerance
             seekEps *= 2;
             options.brightcoveObject.seek( currentTime );
-          }
+          }       
           
           media.dispatchEvent( "timeupdate" );
           
@@ -335,12 +387,9 @@
               paused = false;
             }
             setTimeout( function(){              
-              if ( paused ) options.brightcoveObject.pause();
-              media.dispatchEvent( "canplay" );
-              media.dispatchEvent( "canplaythrough" );           
+              if ( paused ) options.brightcoveObject.pause();                        
             }, 200 );
-            timeUpdate();
-            
+            timeUpdate();            
           }       
         }
         
@@ -387,7 +436,8 @@
   
           paused = media.paused;
           
-          createProperties();
+          createProperties();          
+          
           options.brightcoveObject.play();
   
           media.currentTime = fragmentStart;
