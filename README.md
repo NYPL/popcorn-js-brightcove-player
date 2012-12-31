@@ -30,7 +30,7 @@ The URL must be the full brightcove media url (it cannot be shortened).
 
 You can find this URL by going to your Brightcove Media dashboard, clicking on a video, then clicking ***Quick Video Publish*** -> ***URL***, then copying the shortened URL (e.g. *http://bcove.me/abcdefgh*) and pasting it in a browser to resolve to the full URL.
 
-If you would like to build this URL programmatically, it will be in the format http://link.brightcove.com/services/player/bcpid***{PLAYER_ID}***?bckey=***{PLAYER_KEY}***&bctid=***{VIDEO_ID}***
+If you would like to build this URL programmatically, it will be in the format http://link.brightcove.com/services/player/bcpid{PLAYER_ID}?bckey={PLAYER_KEY}&bctid={VIDEO_ID}
 
 ***VIDEO_ID*** is the Brightcove Video ID. ***PLAYER_ID*** and ***PLAYER_KEY*** can be found by going to your Brightcove Publishing dashboard, clicking the appropriate player, then clicking ***Get Code***, then scroll to the lines that are in this format:
 
@@ -58,7 +58,7 @@ pop.footnote({
 pop.play();
 ```
 
-Using the Brightcove Player:
+Or, using the Brightcove Player:
 
 ```javascript
 var pop = Popcorn.brightcove( '#video', 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001' );
@@ -72,3 +72,7 @@ pop.footnote({
 
 pop.play();
 ```
+
+##Contact
+
+This player is currently still in development. Feel free to send any questions/comments/feedback to [brianfoo@nypl.org](mailto:brianfoo@nypl.org)
