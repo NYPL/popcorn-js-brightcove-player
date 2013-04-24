@@ -3,6 +3,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Popcorn Brightcove Player Example</title>
+      <!--[if lt IE 9]>
+           <script src="../../ie8/popcorn.ie8.js" type="text/javascript"></script>
+      <![endif]-->
       <script src="../../popcorn.js"></script>
       <script src="../../modules/player/popcorn.player.js"></script>
       <script type="text/javascript" src="popcorn.brightcove.js"></script>
@@ -24,7 +27,7 @@
           var paused = true,
               popcorn;
 
-          popcorn = Popcorn.brightcove( '#video', 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001' );
+          popcorn = Popcorn.brightcove( '#video', 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001' );
           
           popcorn = popcorn
             .footnote({

@@ -4,7 +4,7 @@ test( "BC Script not loaded", 1, function() {
 
 asyncTest( "autoplay on", 1, function() {
 
-  var p = Popcorn.brightcove( "#video", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001&autoplay=1" );
+  var p = Popcorn.brightcove( "#video", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001&autoplay=1" );
 
   p.on( "canplaythrough", function() {
     equal( p.media.paused, false, "autoplay on is recognized on URL" );
@@ -17,7 +17,7 @@ asyncTest( "autoplay on", 1, function() {
 
 asyncTest( "autoplay off", 1, function() {
 
-  var p = Popcorn.brightcove( "#video", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001&autoplay=0" );
+  var p = Popcorn.brightcove( "#video", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001&autoplay=0" );
 
   p.on( "canplaythrough", function() {
     equal( p.media.paused, true, "autoplay off is recognized on URL" );
@@ -30,7 +30,7 @@ asyncTest( "autoplay off", 1, function() {
 
 asyncTest( "paused is false when playing", 1, function() {
 
-  var p = Popcorn.brightcove( "#video", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001" );
+  var p = Popcorn.brightcove( "#video", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001" );
 
   p.on( "canplaythrough", function() {
     p.play();
@@ -44,7 +44,7 @@ asyncTest( "paused is false when playing", 1, function() {
 
 asyncTest( "paused is true during canplaythrough", 1, function() {
 
-  var p = Popcorn.brightcove( "#video", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001" );
+  var p = Popcorn.brightcove( "#video", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001" );
 
   p.on( "canplaythrough", function() {
     equal( p.media.paused, true, "paused is true in canplaythrough" );
@@ -56,7 +56,7 @@ asyncTest( "paused is true during canplaythrough", 1, function() {
 
 asyncTest("Update Timer", function () {
 
-  var p2 = Popcorn.brightcove( '#video2', 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001' ),
+  var p2 = Popcorn.brightcove( '#video2', 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001' ),
       expects = 12,
       count   = 0,
       execCount = 0,
@@ -232,7 +232,7 @@ asyncTest("Update Timer", function () {
 
 asyncTest("Plugin Factory", function () {
 
-  var popped = Popcorn.brightcove( '#video2', 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001' ),
+  var popped = Popcorn.brightcove( '#video2', 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001' ),
       methods = "load play pause currentTime mute volume roundTime exec removePlugin",
       expects = 34, // 15*2+2+2. executor/complicator each do 15
       count = 0;
@@ -353,7 +353,7 @@ asyncTest( "Popcorn Brightcove Plugin Url and Duration Tests", function() {
 
   var count = 0,
       expects = 3,
-      popcorn = Popcorn.brightcove( '#video2', 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001' );
+      popcorn = Popcorn.brightcove( '#video2', 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001' );
 
   function plus(){
 
@@ -388,8 +388,8 @@ asyncTest( "Popcorn Brightcove Plugin Url Regex Test", function() {
 
   var urlTests = [
     { name: 'standard',
-      url: 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001',
-      expected: 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001'
+      url: 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001',
+      expected: 'http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001'
     }
   ];
 
@@ -423,7 +423,7 @@ asyncTest( "Player height and width", function() {
 
   expect( 2 );
 
-  var popcorn = Popcorn.brightcove( "#video4", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001" );
+  var popcorn = Popcorn.brightcove( "#video4", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001" );
   var readyStatePoll = function() {
 
     if ( popcorn.media.readyState !== 4 ) {
@@ -466,7 +466,7 @@ asyncTest( "Brightcove ended event", function() {
 
   expect( 1 );
 
-  var pop = Popcorn.brightcove( "#video10", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001" );
+  var pop = Popcorn.brightcove( "#video10", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001" );
 
   pop.on( "ended", function() {
     ok( true, "Brightcove is successfully firing the ended event" );
@@ -494,7 +494,7 @@ asyncTest( "brightcove player gets a proper _teardown", function() {
 
   expect( expects );
 
-  var popcorn = Popcorn.brightcove( "#video9", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001" );
+  var popcorn = Popcorn.brightcove( "#video9", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001" );
   popcorn.on( "loadeddata", function() {
 
     popcorn.destroy();
@@ -521,7 +521,7 @@ asyncTest( "Brightcove ready state events", function() {
 
   expect( expects );
 
-  var popcorn = Popcorn.brightcove( "#video9", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001" );
+  var popcorn = Popcorn.brightcove( "#video9", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001" );
   popcorn.on( "loadeddata", function() {
 
     popcorn.destroy();
@@ -529,7 +529,7 @@ asyncTest( "Brightcove ready state events", function() {
     plus();
   });
 
-  popped = Popcorn.brightcove( "#video6", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001", {
+  popped = Popcorn.brightcove( "#video6", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001", {
     events: {
       canplaythrough: function( e ) {
 
@@ -596,28 +596,28 @@ asyncTest( "Brightcove media start time fragment", function() {
         plus();
       };
 
-  popcorn1 = Popcorn.brightcove( "#video8", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001&start=130" );
+  popcorn1 = Popcorn.brightcove( "#video8", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001&start=130" );
   popcorn1.on( "loadeddata", firstTest);
   if ( popcorn1.readyState >= 4 ) {
 
     firstTest();
   }
 
-  popcorn2 = Popcorn.brightcove( "#video9", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001&t=2m10s" );
+  popcorn2 = Popcorn.brightcove( "#video9", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001&t=2m10s" );
   popcorn2.on( "loadeddata", secondTest);
   if ( popcorn2.readyState >= 4 ) {
 
     secondTest();
   }
 
-  popcorn3 = Popcorn.brightcove( "#video10", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001&t=2m" );
+  popcorn3 = Popcorn.brightcove( "#video10", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001&t=2m" );
   popcorn3.on( "loadeddata", thirdTest);
   if ( popcorn3.readyState >= 4 ) {
 
     thirdTest();
   }
 
-  popcorn4 = Popcorn.brightcove( "#video11", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001&t=10s" );
+  popcorn4 = Popcorn.brightcove( "#video11", "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001&t=10s" );
   popcorn4.on( "loadeddata", fourthTest);
   if ( popcorn4.readyState >= 4 ) {
 
@@ -632,7 +632,7 @@ asyncTest( "brightcove player quarantine", function() {
 });
 
 asyncTest( "brightcove can play type", function() {
-  ok( Popcorn.brightcove.canPlayType( "div", "link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001" ), "brightcove can play url in this format: link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001" );
-  ok( !Popcorn.brightcove.canPlayType( "div", [ "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001", "link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=1864890674001" ] ), "Brightcove can't play an array of urls" );
+  ok( Popcorn.brightcove.canPlayType( "div", "link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001" ), "brightcove can play url in this format: link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001" );
+  ok( !Popcorn.brightcove.canPlayType( "div", [ "http://link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293942932001", "link.brightcove.com/services/player/bcpid1592571451001?bckey=AQ~~,AAABchwNFVk~,kE6q8YogD3vpn3QfnsIdak7n1kINhcVF&bctid=2293911834001" ] ), "Brightcove can't play an array of urls" );
   start();
 });
